@@ -2,9 +2,15 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser'); 
+const mongoose = require('mongoose'); 
 
 const productsRoutes = require('./api/routes/products')
 const ordersRoutes = require('./api/routes/orders')
+
+
+mongoose.connect(process.env.MONGO_DB,(err,dd)=>{
+    // console.log(err,dd);
+});
 
 // Module to log requests and response
 app.use(morgan('dev'));
