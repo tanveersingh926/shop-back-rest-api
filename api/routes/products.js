@@ -14,10 +14,20 @@ router.get('/', function(req, res){
     .then(docs => {
         const response = {
             count:docs.length,
-            products
+            products:docs.map(doc => {
+                return {
+                    _id:doc._id,
+                    name:doc.name,
+                    price:doc.price,
+                    request:{
+                        type: 'GET',
+                        url:'http://localhost:3001/products/'+doc._id
+                    }
+                }
+            })
         }
         // if(docs.length >= 1) {
-            res.status(200).json(docs)
+            res.status(200).json(response);
         // } else {
         //     res.status(404).json({message:'No entries found'})
         // }
