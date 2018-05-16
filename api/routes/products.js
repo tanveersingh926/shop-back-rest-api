@@ -5,10 +5,17 @@ const mongoose = require('mongoose')
 
 const Product = require('../models/product')
 
+
+// Get route for Products
 router.get('/', function(req, res){
-    Product.find().exec()
+    Product.find()
+    .select('name price _id')
+    .exec()
     .then(docs => {
-        console.log(docs);
+        const response = {
+            count:docs.length,
+            products
+        }
         // if(docs.length >= 1) {
             res.status(200).json(docs)
         // } else {
@@ -22,6 +29,8 @@ router.get('/', function(req, res){
     
 });
 
+
+// Post route to save product
 router.post('/', function(req, res){
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
@@ -44,6 +53,9 @@ router.post('/', function(req, res){
    
 });
 
+
+
+// get route for dingle product via productID
 router.get('/:productId', function(req, res){
     const id = req.params.productId;
     
