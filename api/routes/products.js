@@ -47,11 +47,21 @@ router.post('/', function(req, res){
         name:req.body.name,
         price:req.body.price
     })
-    product.save().then(result =>{
+    product
+    .save()
+    .then(result =>{
         console.log(result)
         res.status(200).json({
-            message:"Handling POST",
-            createdProduct:result
+            message:"Created Product",
+            createdProduct:{
+                name:result.name,
+                price:result.price,
+                _id:result._id,
+                request:{
+                    type:"POST",
+                    url:'http://localhost:3001/products/'+result._id
+                }
+            }
         })
     })
     .catch(err => {
@@ -70,11 +80,18 @@ router.get('/:productId', function(req, res){
     const id = req.params.productId;
     
     Product.findById(id)
+    .select('name price _id')
     .exec()
     .then(doc => {
         console.log(doc)
         if(doc){
-            res.status(200).json(doc)
+            res.status(200).json({
+                product:doc,
+                request:{
+                    type:"GET",
+                    url:'http://localhost:3001/products/'
+                }
+            })
         } else {
             res.status(404).json({message:'No Valid entry found for provided ID.'})
         }
@@ -97,7 +114,14 @@ router.patch('/:productId', function(req, res){
     .exec()
     .then(result => {
         console.log(result)
-        res.status(200).json(result);
+        res.status(200).json({
+            message:"Product Updated",
+            request:{
+                type:"PATCH",
+                url:'http://localhost:3001/products/'+id
+            }
+
+        });
     })
     .catch(err => {
         res.status(500).json(err)
@@ -109,7 +133,18 @@ router.delete('/:productId', function(req, res){
     .exec()
     .then(result => {
         console.log(result);
-        res.status(200).json(result);
+        res.status(200).json({
+            message:"Product Updated",
+            request:{
+                type:"POST",
+                url:'http://localhost:3001/products/',
+                payload:{
+                    name:"STRING",
+                    price:"NUMBER"
+                }
+            }
+
+        });
         
     })
     .catch(err => {
