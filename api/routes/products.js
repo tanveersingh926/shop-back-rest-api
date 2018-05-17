@@ -4,8 +4,19 @@ const router = express.Router();
 const mongoose = require('mongoose')
 const multer = require('multer')
 
-const upload = multer({dest:'/uploads/'})
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, './uploads/');
+    },
+    filename: function(req, file, cb) {
+      cb(null, Date.now() + file.originalname);
+    }
+});
 
+const upload = multer({storage:storage})
+
+
+// product Schema / model
 const Product = require('../models/product')
 
 
@@ -44,11 +55,14 @@ router.get('/', function(req, res){
 
 
 // Post route to save product
-router.post('/', function(req, res){
+router.post('/', upload.single('productImage'), function(req, res){
+    console.log(req.file)
+
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name:req.body.name,
-        price:req.body.price
+        price:req.body.price,
+        // productPath
     })
     product
     .save()
