@@ -1,6 +1,6 @@
 {
     "env": {
         "MONGO_DB": "mongodb://localhost:27017/node-rest-shop",
-        "PRIVATE_JWT_KEY":"shhhhhhh"
+        "JWT_KEY":"shhhhhhh"
     }
 }
