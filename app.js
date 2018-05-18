@@ -15,6 +15,7 @@ mongoose.connect(process.env.MONGO_DB,(err,dd)=>{
 // Module to log requests and response
 app.use(morgan('dev'));
 // Bodyparser
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
